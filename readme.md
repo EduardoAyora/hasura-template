@@ -1,6 +1,6 @@
 # Hasura Template
 
-Docker Compose con ambiente de dasarrollo y producción
+Docker Compose con ambiente de desarrollo y producción
 
 ## Acerca de
 
