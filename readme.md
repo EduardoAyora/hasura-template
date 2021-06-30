@@ -11,7 +11,7 @@ En la aplicación se utiliza Hasura y Node con Express. En la base de datos tene
 Clonar el proyecto
 
 ```
-git clone https://github.com/EduardoAyora/hasura-template.git
+git clone git@github.com:EduardoAyora/hasura-template.git
 cd ./hasura-template
 ```
 
