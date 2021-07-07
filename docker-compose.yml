@@ -31,8 +31,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    environment:
-      - PORT=3000
+    env_file: .env
     command: npm start
 volumes:
   db_data:
