@@ -30,6 +30,13 @@ app.post('/login', (req, res) => {
     res.send('Hello World!!!!')
 })
 
+app.use((error, req, res, next) => {
+    if (res.headersSent) {
+        return next(err)
+    }
+    res.status(error.status || 500).json({ message: error.message })
+})
+
 app.listen(port, () => {
     console.log(`Puede ver la aplicación en http://localhost:${port}`)
 })
