@@ -54,14 +54,7 @@ app.post('/login', async (req, res, next) => {
             message: 'Credenciales inválidas',
         })
 
-    let token
-    try {
-        token = generateToken(user)
-    } catch {
-        return res.status(500).json({
-            message: 'Acceso fallido, por favor intente después',
-        })
-    }
+    const token = generateToken(user)
     res.status(200).json({ token })
 })
 
