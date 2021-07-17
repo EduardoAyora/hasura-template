@@ -14,14 +14,19 @@ const port = process.env.PORT
 
 app.use(express.json())
 
-app.post('/signup', async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.contrasena, 10)
+app.post('/signup', async (req, res, next) => {
+    let hashedPassword
+    try {
+        hashedPassword = await bcrypt.hash(req.body.contrasena, 10)
+    } catch (error) {
+        return next({ message: error.message })
+    }
     const userResponse = await hasuraClient.createUser(
         req.body.email,
         hashedPassword
     )
     if (userResponse.errors)
-        return res.status(400).json({ error: userResponse.errors[0].message })
+        return res.status(400).json({ message: userResponse.errors[0].message })
     const user = userResponse.data.insert_usuario_one
     res.status(200).json({ data: user })
 })

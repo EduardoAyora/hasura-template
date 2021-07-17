@@ -16,13 +16,7 @@ class HasuraClient {
             headers: this.headers,
         })
         if (!requestData.ok) {
-            return {
-                errors: [
-                    {
-                        message: `Falló con el código ${requestData.status_code}`,
-                    },
-                ],
-            }
+            return console.log(`Falló con el código ${requestData.status_code}`)
         }
         return await requestData.json()
     }
