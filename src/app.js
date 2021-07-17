@@ -18,45 +18,51 @@ app.use(express.json())
 app.post('/signup', async (req, res, next) => {
     let hashedPassword
     try {
-        hashedPassword = await bcrypt.hash(req.body.contrasena, 10)
+        hashedPassword = await bcrypt.hash(req.body.input.contrasena, 10)
     } catch (error) {
         return next({ message: error.message })
     }
     const userResponse = await hasuraClient.createUser(
-        req.body.email,
+        req.body.input.email,
         hashedPassword
     )
     if (userResponse.errors)
         return res.status(400).json({ message: userResponse.errors[0].message })
     const user = userResponse.data.insert_usuario_one
-    res.status(200).json({ data: user })
+    res.status(200).json(user)
 })
 
 app.post('/login', async (req, res, next) => {
-    const userResponse = await hasuraClient.findUserByEmail(req.body.email)
+    const userResponse = await hasuraClient.findUserByEmail(
+        req.body.input.email
+    )
     user = userResponse.data.usuario[0]
     let isValidPassword = false
     try {
         isValidPassword = await bcrypt.compare(
-            req.body.contrasena,
+            req.body.input.contrasena,
             user.contrasena
         )
     } catch (err) {
-        return next({
+        return res.status(400).json({
             message: 'No se le pudo dar acceso, verifique sus credenciales',
         })
     }
 
     if (!isValidPassword)
-        return next({ message: 'Credenciales inválidas', status: 401 })
+        return res.status(401).json({
+            message: 'Credenciales inválidas',
+        })
 
     let token
     try {
         token = generateToken(user)
     } catch {
-        return next({ message: 'Acceso fallido, por favor intente después' })
+        return res.status(500).json({
+            message: 'Acceso fallido, por favor intente después',
+        })
     }
-    res.status(200).json({ data: { token } })
+    res.status(200).json({ token })
 })
 
 app.use((error, req, res, next) => {
