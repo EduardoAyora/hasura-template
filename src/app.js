@@ -32,7 +32,7 @@ app.post('/signup', async (req, res, next) => {
     res.status(200).json(user)
 })
 
-app.post('/login', async (req, res, next) => {
+app.post('/login', async (req, res) => {
     const userResponse = await hasuraClient.findUserByEmail(
         req.body.input.email
     )
