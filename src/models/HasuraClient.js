@@ -35,6 +35,21 @@ class HasuraClient {
             { email: email, contrasena: contrasena }
         )
     }
+
+    async findUserByEmail(email) {
+        return await this.runQuery(
+            `
+            query FindUserByEmail($email: String!) {
+                usuario(where: {email: {_eq: $email}}, limit: 1) {
+                    id
+                    email
+                    contrasena
+                }
+            }
+        `,
+            { email: email }
+        )
+    }
 }
 
 module.exports = HasuraClient
